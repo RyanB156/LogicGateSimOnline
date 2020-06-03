@@ -1,33 +1,26 @@
-<div class='main-nav'>
-    <div class='navbar navbar-inverse'>
-        <div class='navbar-header'>
-            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse' [attr.aria-expanded]='isExpanded' (click)='toggle()'>
-                <span class='sr-only'>Toggle navigation</span>
-                <span class='icon-bar'></span>
-                <span class='icon-bar'></span>
-                <span class='icon-bar'></span>
-            </button>
-            <a class='navbar-brand' [routerLink]='["/"]'>LogicGateSimOnline</a>
+<nav class="navbar navbar-expand-sm navbar-light bg-light mb-3">
+  <div>
+    <a href="/" class="pr-2 h3 mb-0 mt-auto">LogicGateSimOnline</a>
+  </div>
+  <button class="navbar-toggler" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li>
+        <a class="nav-link h5 mb-0" href="/edit">Edit</a>
+      </li>
+      <li class="nav-item dropdown mt-auto mb-0 h5">
+        <a class="nav-link dropdown-toggle" href="#programSubmenu" data-toggle="dropdown" aria-expanded="false"
+           role="button" aria-haspopup="true" id="programbarDropdown">Sample Programs</a>
+        <div class="dropdown-menu" id="programSubmenu" aria-labelledby="programbarDropdown">
+          <a href="/edit/1" class="dropdown-item">Sample 1</a>
         </div>
-        <div class='clearfix'></div>
-        <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
-            <ul class='nav navbar-nav'>
-                <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
-                    <a [routerLink]='["/"]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-home'></span> Home
-                    </a>
-                </li>
-                <li [routerLinkActive]='["link-active"]'>
-                    <a [routerLink]='["/counter"]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-education'></span> Counter
-                    </a>
-                </li>
-                <li [routerLinkActive]='["link-active"]'>
-                    <a [routerLink]='["/fetch-data"]' (click)='collapse()'>
-                        <span class='glyphicon glyphicon-th-list'></span> Fetch data
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
+      </li>
+    </ul>
+  </div>
+</nav>
