@@ -1,0 +1,12 @@
+<p>Write your program here then hit 'Run' to see your circuit in action</p>
+<div class="text-center pb-3">
+  <button class="btn btn-primary w-25" (click)="run()">Run</button>
+</div>
+<div class="row">
+  <div class="col-6" style="min-height:400px">
+    <textarea class="w-100 h-100 align-text-top" style="min-height:90%" [(ngModel)]="program"></textarea>
+  </div>
+  <div class="col-6">
+    <app-execute></app-execute>
+  </div>
+</div>
