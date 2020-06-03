@@ -1,0 +1,16 @@
+
+.input-on {
+  background-color: rgb(0, 189, 20);
+}
+
+  .input-on:hover {
+    background-color: rgb(0, 142, 15);
+  }
+
+.input-off {
+  background-color: rgb(189, 20, 0);
+}
+
+.input-off:hover {
+  background-color: rgb(142, 15, 0);
+}
