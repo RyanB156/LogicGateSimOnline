@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { LogicGate, InputGate, OutputGate } from '../../LogicGateDomain/Domain';
+import { LogicGate } from '../../LogicGateDomain/BaseClasses';
+import { UnaryCanonicalGates } from '../../LogicGateDomain/UnaryGates';
 import { Array } from '../extensions/Array';
+import { jsonToCircuit } from '../../LogicGateDomain/ParseJson';
+import { CustomGate } from '../../LogicGateDomain/CustomGate';
 
 @Component({
   selector: 'app-execute',
@@ -10,9 +13,9 @@ import { Array } from '../extensions/Array';
 export class ExecuteComponent implements OnInit {
 
   inputs: number = 0;
-  inputSet: InputGate[] = [];
+  inputSet: UnaryCanonicalGates.InputGate[] = [];
   outputs: number = 0;
-  outputSet: OutputGate[] = [];
+  outputSet: UnaryCanonicalGates.OutputGate[] = [];
   circuit: LogicGate[] = null;
   circuitString: string = "";
 
@@ -22,6 +25,10 @@ export class ExecuteComponent implements OnInit {
   }
 
   run(circuit: LogicGate[]) {
+
+    circuit = jsonToCircuit(circuit);
+    console.log(JSON.stringify(circuit));
+
     this.circuit = circuit;
     this.circuitString = JSON.stringify(circuit);
     this.inputs = Array.countBy(circuit, l => l.type === "InputGate");
@@ -32,19 +39,28 @@ export class ExecuteComponent implements OnInit {
     console.log(this.inputs + " " + this.outputs);
     this.inputSet = this.getInputs();
     this.outputSet = this.getOutputs();
+
+    // Start the circuit with all zeroes to update the outputs.
+    this.fireZeros();
   }
 
+  fireZeros() {
+    this.inputSet.forEach(i => i.Fire());
+  }
+
+  // An input is clicked, toggle the input gate's output. This will also toggle the display's color using [ngClass].
   inputClick(index: number) {
     console.log(`Input ${index} clicked`);
-    this.inputSet[index].Output = !this.inputSet[index].Output; // TODO: Change to class method call once I translate all of them...
+    this.inputSet[index].SetInputAndFire(!this.inputSet[index].Input);
   }
 
-  getInputs() : InputGate[] {
-    return <InputGate[]>this.circuit.filter(l => l.type === "InputGate");
+
+  getInputs(): UnaryCanonicalGates.InputGate[] {
+    return <UnaryCanonicalGates.InputGate[]>this.circuit.filter(l => l.type === "InputGate");
   }
 
-  getOutputs(): OutputGate[] {
-    return <OutputGate[]>this.circuit.filter(l => l.type === "OutputGate");
+  getOutputs(): UnaryCanonicalGates.OutputGate[] {
+    return <UnaryCanonicalGates.OutputGate[]>this.circuit.filter(l => l.type === "OutputGate");
   }
 
 }

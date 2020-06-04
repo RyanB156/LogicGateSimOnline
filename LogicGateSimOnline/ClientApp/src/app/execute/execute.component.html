@@ -1,22 +1,23 @@
-<p>execute works!</p>
-<p>inputs: {{ inputs }}</p>
-<p>outputs: {{ outputs }}</p>
-
-<div class="row">
-  <div class="col">
-    <ul class="list-unstyled">
-      <li *ngFor="let input of inputSet; let i = index">
-        <button class="btn btn-primary my-2" [ngClass]="inputSet[i].Output ? 'input-on' : 'input-off'" (click)="inputClick(i)">
-          Input {{ i }}
-        </button>
-      </li>
-    </ul>
-  </div>
-  <div class="col">
-    <ul class="list-unstyled">
-      <li *ngFor="let input of outputSet; let i = index">
-        <div class="btn btn-primary my-2">Output {{ i }}</div>
-      </li>
-    </ul>
+<div class="border">
+  <p>execute works!</p>
+  <p>inputs: {{ inputs }}</p>
+  <p>outputs: {{ outputs }}</p>
+  <div class="row">
+    <div class="col">
+      <ul class="list-unstyled">
+        <li *ngFor="let input of inputSet; let i = index">
+          <button class="btn btn-primary my-2" [ngClass]="inputSet[i].Output ? 'input-on' : 'input-off'" (click)="inputClick(i)">
+            Input {{ i }}
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div class="col">
+      <ul class="list-unstyled">
+        <li *ngFor="let input of outputSet; let i = index">
+          <div class="btn btn-primary my-2" [ngClass]="outputSet[i].Output ? 'input-on' : 'input-off'">Output {{ i }}</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
