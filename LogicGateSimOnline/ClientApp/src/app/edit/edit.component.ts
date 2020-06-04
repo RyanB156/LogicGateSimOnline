@@ -1,15 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { LogicGate } from '../../LogicGateDomain/Domain';
+import { LogicGate } from '../../LogicGateDomain/BaseClasses';
 import { ActivatedRoute } from '@angular/router';
 import { ExecuteComponent } from '../execute/execute.component';
 
 /* Next:
-     *  Test project linking with api and postman
-     *  Test api call from here to circuit controller
-     *  Get LogicGate[] and display inputs and outputs (May need to have full TS classes for logic gates?)
-     *  Test button linking to inputs (list of buttons created -> call w/ index)
+     *  Test project linking with api and postman √
+     *  Test api call from here to circuit controller √
+     *  Get LogicGate[] and display inputs and outputs (May need to have full TS classes for logic gates?) √
+     *  Test button linking to inputs (list of buttons created -> call w/ index) √
      *  Test usage of circuit
+     *
+     *  !!! Fix nulls in parsed circuit !!!
      *
      *  Add Text property to C# classes for mapping to typescript classes √
      *  Clock to cycle the flipflops
@@ -52,7 +54,6 @@ mygate.A :- out
     this.http = http;
 
     this.route.params.subscribe(params => {
-      console.log(params);
 
       // If the id parameter is set and is a valid number.
       if (params['id'] && +params['id'] !== NaN) {
@@ -79,8 +80,6 @@ mygate.A :- out
 
     this.http.post<LogicGate[]>(this.baseUrl + 'api/circuit/buildcircuit', new CircuitProgram(this.program),
       httpOptions).subscribe(result => {
-
-        //console.log(JSON.stringify(result));
         this.executeArea.run(result);
       }, error => console.error(error));
 
