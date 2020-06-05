@@ -6,8 +6,8 @@ export class NaryGate extends SingleOutputGate {
   AreInputsUpdated: boolean[];
   Name: string;
 
-  constructor(name: string, inputCount: number, nameList: string[]) {
-    super(name, inputCount, nameList);
+  constructor(name: string, inputCount: number, inputNames: string[]) {
+    super(name, inputCount, inputNames);
     this.InputStates = []; // Store the input states.
     this.AreInputsUpdated = []; // Check if all inputs have been updated.
     this.Name = name;
@@ -49,8 +49,8 @@ export class NaryGate extends SingleOutputGate {
 export module NaryCanonicalGates {
   export class AndGate extends NaryGate {
     type: string = "AndGate";
-    constructor(name: string, inputCount: number, nameList: string[]) {
-      super(name, inputCount, nameList);
+    constructor(name: string, inputCount: number, inputNames: string[]) {
+      super(name, inputCount, inputNames);
     }
     public CheckOutput(): void {
       this.Output = this.InputStates.reduce((a, b) => a && b);
@@ -60,8 +60,8 @@ export module NaryCanonicalGates {
 
   export class OrGate extends NaryGate {
     type: string = "OrGate";
-    constructor(name: string, inputCount: number, nameList: string[]) {
-      super(name, inputCount, nameList);
+    constructor(name: string, inputCount: number, inputNames: string[]) {
+      super(name, inputCount, inputNames);
     }
     public CheckOutput(): void {
       this.Output = this.InputStates.reduce((a, b) => a || b);
@@ -72,8 +72,8 @@ export module NaryCanonicalGates {
   // DifferentGate
   export class XorGate extends NaryGate {
     type: string = "XorGate";
-    constructor(name: string, inputCount: number, nameList: string[]) {
-      super(name, inputCount, nameList);
+    constructor(name: string, inputCount: number, inputNames: string[]) {
+      super(name, inputCount, inputNames);
     }
     public CheckOutput(): void {
       this.Output = this.InputStates.reduce((a, b) => a !== b);
@@ -84,8 +84,8 @@ export module NaryCanonicalGates {
   // EqualGate
   export class XnorGate extends NaryGate {
     type: string = "XnorGate";
-    constructor(name: string, inputCount: number, nameList: string[]) {
-      super(name, inputCount, nameList);
+    constructor(name: string, inputCount: number, inputNames: string[]) {
+      super(name, inputCount, inputNames);
     }
     public CheckOutput(): void {
       this.Output = this.InputStates.reduce((a, b) => a === b);
@@ -95,8 +95,8 @@ export module NaryCanonicalGates {
 
   export class NandGate extends NaryGate {
     type: string = "NandGate";
-    constructor(name: string, inputCount: number, nameList: string[]) {
-      super(name, inputCount, nameList);
+    constructor(name: string, inputCount: number, inputNames: string[]) {
+      super(name, inputCount, inputNames);
     }
     public CheckOutput(): void {
       this.Output = this.InputStates.reduce((a, b) => !(a && b));
@@ -106,8 +106,8 @@ export module NaryCanonicalGates {
 
   export class NorGate extends NaryGate {
     type: string = "NorGate";
-    constructor(name: string, inputCount: number, nameList: string[]) {
-      super(name, inputCount, nameList);
+    constructor(name: string, inputCount: number, inputNames: string[]) {
+      super(name, inputCount, inputNames);
     }
     public CheckOutput(): void {
       this.Output = this.InputStates.reduce((a, b) => !(a && b));

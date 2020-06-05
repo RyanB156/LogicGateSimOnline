@@ -16,21 +16,20 @@ function parseGate(json: object): LogicGate {
    * these are null:
    *  outputs, inputs, areinputsupdated
    */
-
   switch (json["type"]) {
-    case "AndGate": return new NaryCanonicalGates.AndGate(json["name"], json["inputCount"], json["nameList"]);
-    case "OrGate": return new NaryCanonicalGates.OrGate(json["name"], json["inputCount"], json["nameList"]); 
-    case "XorGate": return new NaryCanonicalGates.XorGate(json["name"], json["inputCount"], json["nameList"]);
-    case "XnorGate": return new NaryCanonicalGates.AndGate(json["name"], json["inputCount"], json["nameList"]);
-    case "NandGate": return new NaryCanonicalGates.AndGate(json["name"], json["inputCount"], json["nameList"]);
-    case "NorGate": return new NaryCanonicalGates.AndGate(json["name"], json["inputCount"], json["nameList"]);
+    case "AndGate": return new NaryCanonicalGates.AndGate(json["name"], json["inputCount"], json["inputNames"]);
+    case "OrGate": return new NaryCanonicalGates.OrGate(json["name"], json["inputCount"], json["inputNames"]); 
+    case "XorGate": return new NaryCanonicalGates.XorGate(json["name"], json["inputCount"], json["inputNames"]);
+    case "XnorGate": return new NaryCanonicalGates.AndGate(json["name"], json["inputCount"], json["inputNames"]);
+    case "NandGate": return new NaryCanonicalGates.AndGate(json["name"], json["inputCount"], json["inputNames"]);
+    case "NorGate": return new NaryCanonicalGates.AndGate(json["name"], json["inputCount"], json["inputNames"]);
     case "NotGate": return new UnaryCanonicalGates.NotGate(json["name"]);
     case "InputGate": return new UnaryCanonicalGates.InputGate(json["name"], json["input"]);
     case "OutputGate": return new UnaryCanonicalGates.OutputGate(json["name"]);
     case "IdentityGate": return new UnaryCanonicalGates.IdentityGate(json["name"]);
     case "TrueGate": return new UnaryCanonicalGates.TrueGate(json["name"]);
     case "FalseGate": return new UnaryCanonicalGates.FalseGate(json["name"]);
-    case "Decoder": return new NDecoder(json["name"], json["inputCount"], json["inputNameMap"], json["outputNameMap"]);
+    case "NDecoder": return new NDecoder(json["name"], json["inputCount"], json["inputNameMap"], json["outputNameMap"]);
     case "Multiplexer": return new Multiplexer(json["name"], json["inputCount"], json["inputNameMap"]);
     case "DFlipFlop": return new DFlipFlop(json["name"], json["outputNameMap"]);
     case "TFlipFlop": return new TFlipFlop(json["name"], json["outputNameMap"]);
@@ -40,7 +39,11 @@ function parseGate(json: object): LogicGate {
   }
 }
 
-function connectGates(circuit: LogicGate[], jsonObject: object[]) : void {
+function connectGates(circuit: LogicGate[], jsonObject: object[]): void {
+
+  console.log("Connecting:");
+  console.log(circuit);
+
   circuit.forEach(lG => {
     console.log(`connectGates - Connecting outputs for gate ${lG.Name}`);
     // Find the logic gate in the json object to access its connection list.
@@ -50,9 +53,11 @@ function connectGates(circuit: LogicGate[], jsonObject: object[]) : void {
     } else {
       // Gates with a "connectedGates" field have one output to map to other gates.
       if (o["connectedGates"]) {
-        console.log(`connectGates - ${lG.Name} has an output map`);
+        console.log(`connectGates - ${lG.Name} has connected gates`);
         o["connectedGates"].forEach(cG => { // Get of the json objects for the output.
-          let targetGate = circuit.find(c => c.Name === cG["targetGate"]["name"]); // Use name to get circuit object.
+          let targetGate = circuit.find(c => {
+            console.log(c); return c.Name === cG["targetGate"]["name"]
+          }); // Use name to get circuit object.
           if (targetGate) {
             console.log(`connectGates.cG - Connecting gate ${lG.Name} to target gate ${targetGate.Name} on node ${cG["inputNode"]}`);
             (<SingleOutputGate>lG).AddConnection(new OutputConnection(targetGate, cG["inputNode"]));
@@ -85,7 +90,7 @@ function connectGates(circuit: LogicGate[], jsonObject: object[]) : void {
  * OutputConnections must be made to the same object of each gate. This means that each gate must be connected first, then they will be connected.
  */
 
-export function jsonToCircuit(jsonObject: object[]): LogicGate[] {
+export function jsonToCircuit(jsonObject: LogicGate[]): LogicGate[] {
   console.log("jsonToCircuit - parsing to circuit");
   let circuit = jsonObject.map(parseGate);
 

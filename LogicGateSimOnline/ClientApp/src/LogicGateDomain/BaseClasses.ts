@@ -1,4 +1,13 @@
 import { OutputConnection } from './OutputConnection';
+import { DFlipFlop, TFlipFlop, JKFlipFlop } from './MSIGates';
+
+export interface IClockable {
+  Tick(): void;
+}
+
+export function isClockable(arg: LogicGate) : boolean {
+  return arg["Tick"] !== undefined;
+}
 
 /**Base class that contains the main functionality of all logic gates. */
 export class LogicGate {
@@ -49,8 +58,8 @@ export class SingleOutputGate extends LogicGate {
   type: string = "SingleOutputGate";
   ConnectedGates: OutputConnection[];
 
-  constructor(name: string, inputCount: number, nameList: string[]) {
-    super(name, inputCount, nameList);
+  constructor(name: string, inputCount: number, inputNames: string[]) {
+    super(name, inputCount, inputNames);
     this.ConnectedGates = [];
   }
 

@@ -1,4 +1,4 @@
-import { MultipleOutputGate, SingleOutputGate } from './BaseClasses';
+import { MultipleOutputGate, SingleOutputGate, IClockable } from './BaseClasses';
 
 export class NDecoder extends MultipleOutputGate {
   type: string = "NDecoder";
@@ -110,7 +110,7 @@ export class Multiplexer extends SingleOutputGate {
   }
 }
 
-export class DFlipFlop extends MultipleOutputGate {
+export class DFlipFlop extends MultipleOutputGate implements IClockable {
   type: string = "DFlipFlop";
   D: boolean;
 
@@ -139,7 +139,7 @@ export class DFlipFlop extends MultipleOutputGate {
   }
 }
 
-export class TFlipFlop extends MultipleOutputGate {
+export class TFlipFlop extends MultipleOutputGate implements IClockable {
   type: string = "TFlipFlop";
   T: boolean;
   State: boolean;
@@ -167,7 +167,7 @@ export class TFlipFlop extends MultipleOutputGate {
   }
 }
 
-export class JKFlipFlop extends MultipleOutputGate {
+export class JKFlipFlop extends MultipleOutputGate implements IClockable {
   type: string = "JKFlipFlop";
   J: boolean;
   K: boolean;

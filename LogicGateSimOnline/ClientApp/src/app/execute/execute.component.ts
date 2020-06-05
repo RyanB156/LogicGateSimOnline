@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { LogicGate } from '../../LogicGateDomain/BaseClasses';
+import { LogicGate, IClockable, isClockable } from '../../LogicGateDomain/BaseClasses';
 import { UnaryCanonicalGates } from '../../LogicGateDomain/UnaryGates';
 import { Array } from '../extensions/Array';
 import { jsonToCircuit } from '../../LogicGateDomain/ParseJson';
-import { CustomGate } from '../../LogicGateDomain/CustomGate';
+import { DFlipFlop, TFlipFlop, JKFlipFlop } from '../../LogicGateDomain/MSIGates';
 
 @Component({
   selector: 'app-execute',
@@ -16,32 +16,61 @@ export class ExecuteComponent implements OnInit {
   inputSet: UnaryCanonicalGates.InputGate[] = [];
   outputs: number = 0;
   outputSet: UnaryCanonicalGates.OutputGate[] = [];
+  clockableSet: LogicGate[] = [];
   circuit: LogicGate[] = null;
   circuitString: string = "";
+
+  errorMessage: string = "";
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  error(error: any) {
+    this.errorMessage = "Error:\n" + JSON.stringify(error);
+  }
+
   run(circuit: LogicGate[]) {
 
-    circuit = jsonToCircuit(circuit);
-    console.log(JSON.stringify(circuit));
+    // Clear the error message on a successful run.
+    this.errorMessage = "";
 
-    this.circuit = circuit;
-    this.circuitString = JSON.stringify(circuit);
-    this.inputs = Array.countBy(circuit, l => l.type === "InputGate");
-    this.outputs = Array.countBy(circuit, l => l.type === "OutputGate");
+    console.log("Received: \n" + JSON.stringify(circuit));
 
-    //circuit.forEach(l => console.log(l.type));
+    this.circuit = jsonToCircuit(circuit);
+    console.log(JSON.stringify(this.circuit));
+
+    this.circuitString = JSON.stringify(this.circuit);
+    this.inputs = Array.countBy(this.circuit, l => l.type === "InputGate");
+    this.outputs = Array.countBy(this.circuit, l => l.type === "OutputGate");
+    this.clockableSet = this.circuit.filter(l => isClockable(l));
+
+    if (this.clockableSet === undefined || this.clockableSet === null) {
+      this.clockableSet = [];
+    }
 
     console.log(this.inputs + " " + this.outputs);
     this.inputSet = this.getInputs();
     this.outputSet = this.getOutputs();
 
+    if (this.clockableSet.length > 0) {
+      this.clock();
+    }
+
     // Start the circuit with all zeroes to update the outputs.
     this.fireZeros();
+  }
+
+  clock() {
+    this.clockableSet.forEach(l => {
+      if (l instanceof DFlipFlop || l instanceof JKFlipFlop || l instanceof TFlipFlop) {
+        l.Tick();
+      }
+      
+    });
+
+    window.setTimeout(this.clock, 1000);
   }
 
   fireZeros() {

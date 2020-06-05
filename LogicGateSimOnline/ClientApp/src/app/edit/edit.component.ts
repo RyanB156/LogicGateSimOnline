@@ -28,6 +28,7 @@ export class EditComponent implements OnInit {
 
   // Store a list of available programs.
   programSet: string[] = [`
+// 1
 Input in1
 Input in2
 Output out
@@ -43,6 +44,47 @@ and(mygate)
 in1 :- mygate, a
 in2 :- mygate, b
 mygate.A :- out
+`, `
+// 2
+Input in1
+Input in2
+Decoder2 dec
+Output out1
+Output out2
+Output out3
+Output out4
+
+in1 :- dec, 1
+in2 :- dec, 2
+dec.0 :- out1
+dec.1 :- out2
+dec.2 :- out3
+dec.3 :- out4
+`, `
+// 3
+Input x
+Input y
+Xor2 x1
+Xor2 x2
+DFlipFlop f
+Output out
+
+x :- x1, 1
+y :- x1, 2
+x1 :- x2, 2
+f.0 :- x2, 1
+x2 :- f
+f.0 :- out
+`, `
+// 4
+Input x
+Input y
+Xor2 x1
+Output out
+
+x :- x1, 1
+y :- x1, 2
+x1 :- out
 `
   ];
   program: string;
@@ -78,10 +120,11 @@ mygate.A :- out
       })
     };
 
-    this.http.post<LogicGate[]>(this.baseUrl + 'api/circuit/buildcircuit', new CircuitProgram(this.program),
-      httpOptions).subscribe(result => {
-        this.executeArea.run(result);
-      }, error => console.error(error));
+    this.http.post<LogicGate[]>(this.baseUrl + 'api/circuit/buildcircuit', new CircuitProgram(this.program), httpOptions)
+      .subscribe({
+        next: data => this.executeArea.run(data),
+        error: error => this.executeArea.error(error)
+      });
 
   }
 
