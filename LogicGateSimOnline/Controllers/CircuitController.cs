@@ -12,11 +12,18 @@ namespace LogicGateSimOnline.Controllers
     public class CircuitController : Controller
     {
         [HttpPost("[action]")]
-        public IEnumerable<LogicGate> BuildCircuit([FromBody]CircuitProgram program)
+        public IActionResult BuildCircuit([FromBody]CircuitProgram program)
         {
-            var statements = FCircuitParser.Parser.getProgramFromString(program.Text);
-            var circuit = FCircuitParser.Parser.getCircuit(statements);
-            return circuit;
+            try
+            {
+                var statements = FCircuitParser.Parser.getProgramFromString(program.Text);
+                var circuit = FCircuitParser.Parser.getCircuit(statements);
+                return Ok(circuit);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         public class CircuitProgram

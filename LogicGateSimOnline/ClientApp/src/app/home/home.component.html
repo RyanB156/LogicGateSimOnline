@@ -1,11 +1,83 @@
 <h3>Welcome to LogicGateSimOnline</h3>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu odio massa. Quisque vehicula magna lacus, vitae scelerisque risus vestibulum sit amet. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce egestas odio quis eros laoreet, eu semper justo commodo. Integer eu leo ipsum. Sed ut libero lacus. Integer cursus nisl vel lobortis finibus. Fusce ullamcorper justo pellentesque quam iaculis consectetur. Quisque commodo erat ac eros ultricies ultricies. Cras blandit felis ligula, vel consectetur odio iaculis sit amet. Nunc quis dapibus turpis. Ut condimentum metus at neque sodales laoreet vel at risus. Nullam cursus metus non quam hendrerit, rutrum fermentum tortor tincidunt. Sed dictum odio a dolor molestie, eu tincidunt ipsum fermentum. Etiam ac lorem nulla. Ut ultricies nisi convallis odio elementum pellentesque.</p>
+<div>
+  <p>A programming language that allows you to simulate logic circuits. You can toggle inputs on or off to see the output of your circuit. It supports basic logic gates such as AND, OR, and NOT, as well as Decoders, Multiplexers, Flip-Flops. You can also create your own logic gate with any number of inputs and outputs.</p>
 
-<p>Aenean ac dignissim nunc. Integer vel quam urna. Donec ac finibus metus, id sodales ipsum. Aliquam posuere imperdiet sodales. Donec interdum neque eu nisl ultricies dictum. Sed neque magna, facilisis at fringilla id, rhoncus et magna. Curabitur nec dictum libero.</p>
+  <p>
+    F# code in FCircuitParser is used to parse the program with the FParsec Library and creates logic gate objects as defined in LogicGateDomain and links them together.
+    The C# Windows forms project in LogicGateSim takes the completed circuit and displays the inputs and outputs on a form where the user can click to toggle the inputs for the circuit and see the output.
+  </p>
 
-<p>Morbi rhoncus libero quis odio aliquam, quis elementum eros pulvinar. Duis sed ante vel massa pellentesque mollis quis gravida arcu. Nunc mollis eleifend augue, ac sollicitudin nisi dictum vel. Pellentesque eget risus nisi. Morbi at ultrices mi. Donec et tortor elementum, tempus risus vitae, laoreet sem. Vivamus non viverra ex. Pellentesque turpis neque, egestas in pharetra ac, pulvinar quis nisi. Etiam tempus diam ut congue ornare. Vestibulum eros augue, porta ac velit quis, tempor maximus libero. Morbi suscipit eros nec elit gravida, quis euismod augue blandit.</p>
+  <b class="h4 mb-5">Syntax</b>
 
-<p>Pellentesque iaculis sollicitudin ipsum, in imperdiet sem egestas ac. Fusce a efficitur nibh. Vestibulum eget tempus metus. Aliquam vitae enim ornare massa iaculis maximus in in ex. Suspendisse at lacus ut lectus facilisis tempus in sit amet nulla. Sed congue ipsum vel enim sodales, et finibus neque porttitor. Nullam augue quam, dictum a augue at, facilisis fringilla elit. Phasellus lacus ligula, fringilla a tempor sed, vulputate non ante. Morbi augue libero, cursus quis cursus ut, pellentesque in purus. Donec sed augue mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+  <p class="mb-0">[load <"filepath">]</p>
+  <p class="mb-0">{{'<'}}GateType{{'>'}}[input count][(In1Name, In2Name, ..., InNName [: Out1Name, ..., OutNName])]</p>
+  <p class="mb-0">{{'<'}}source gate name{{'>'}}[.{{'<'}}output number{{'>'}} (0 indexed)] :- {{'<'}}target gate name{{'>'}}[, {{'<'}}target gate input choice{{'>'}} (1 indexed)]</p>
+  <p class="mb-0">define {{ '<' }}custom gate type name{{ '>' }}</p>
+  <p class="mb-0">(In1Name, ..., InNName : Out1Name, ..., OutNName)</p>
+  <p class="mb-0">{{'{'}}</p>
+  <p class="ml-3 mb-0">Out1Name {{ '<' }}- (Boolean expression using [', ., +,={{ '>' }}, ==, {{ '<' }}{{ '>' }}], 1, 0) ; [// {{ '<' }}comment{{ '>' }}]</p>
+  <p class="ml-3 mb-0">...;</p>
+  <p class="ml-3 mb-0">OutNName {{ '<' }}- ... ;</p>
+  <p class="mb-0">{{'}'}}</p>
 
-<p>Aliquam tortor quam, fermentum id sapien vel, aliquam aliquet dui. Donec non vulputate sem. In mollis tortor quis dui pellentesque eleifend. Nulla venenatis, dolor eu fermentum mollis, ipsum neque lacinia sem, sit amet tincidunt sem purus nec libero. Nullam massa diam, lacinia ac dui in, euismod elementum urna. Curabitur interdum egestas massa, vitae malesuada ex fringilla vitae. Curabitur ut dignissim ligula. Quisque ultrices pellentesque massa, at volutpat lorem aliquet a. Ut a consectetur lectus, non pulvinar quam. Duis odio purus, sollicitudin sit amet porta eget, interdum ac risus.</p>
+  <p class="mb-0">[// comment]</p>
+  <p class="">[/* block comment */]</p>
+
+  <b class="h4">Sample Program</b>
+
+  <p class="mb-0">// Negation circuit.</p>
+  <p class="mb-0">// Creates an input, output, and a custom gate acting as a NOT gate.</p>
+  <p class="mb-0">Input Input1</p>
+  <p class="mb-0">//Input Input2</p>
+  <p class="mb-0">//Input Input3</p>
+
+  <p class="mb-0">define myGate(a : o)</p>
+  <p class="mb-0">{{'{'}}</p>
+  <p class=" ml-3 mb-0">o {{ '<' }}- a';</p>
+  <p class="mb-0">{{'}'}}</p>
+  <p class="mb-0">myGate(myGate1) Output Output1</p>
+  <p class="mb-0">Input1 :- myGate1, a</p>
+  <p class="">myGate1.o :- Output1</p>
+
+  <b class="h4">Sample Program</b>
+
+  <p class="mb-0">// Full adder using a custom gate as a decoder (these are also supported by themselves) and n-input or gates.</p>
+  <p class="mb-0">Input Input1</p>
+  <p class="mb-0">Input Input2</p>
+  <p class="mb-0">Input Input3</p>
+
+  <p class="mb-0">Or4 SumOr</p>
+  <p class="mb-0">Or4 CarryOr</p>
+  <p class="mb-0"></p>
+  <p class="mb-0">Output Sum</p>
+  <p class="mb-0">Output Carry</p>
+
+  <p class="mb-0">create myGate(a, b, c : A, B, C, D, E, F, G, H)</p>
+  <p class="mb-0">{{ '{' }}</p>
+  <p class="ml-3 mb-0">A {{ '<' }}- a'.b'.c';</p>
+  <p class="ml-3 mb-0">B {{ '<' }}- a'.b'.c;</p>
+  <p class="ml-3 mb-0">C {{ '<' }}- a'.b.c';</p>
+  <p class="ml-3 mb-0">D {{ '<' }}- a'.b.c;</p>
+  <p class="ml-3 mb-0">E {{ '<' }}- a.b'.c';</p>
+  <p class="ml-3 mb-0">F {{ '<' }}- a.b'.c;</p>
+  <p class="ml-3 mb-0">G {{ '<' }}- a.b.c';</p>
+  <p class="ml-3 mb-0">H {{ '<' }}- a.b.c;</p>
+  <p class="mb-0">{{ '}' }}</p>
+
+  <p class="mb-0">Input1 :- myGate1, a // Reference inputs to the next gate with , {{ '<' }}input name (or number if using the default gates){{ '>' }}</p>
+  <p class="mb-0">Input2 :- myGate1, b</p>
+  <p class="mb-0">Input3 :- myGate1, c</p>
+
+  <p class="mb-0">myGate.B :- SumOr, 1</p>
+  <p class="mb-0">myGate.C :- SumOr, 2</p>
+  <p class="mb-0">myGate.E :- SumOr, 3</p>
+  <p class="mb-0">myGate.H :- SumOr, 4</p>
+
+  <p class="mb-0">myGate.D :- CarryOr, 1</p>
+  <p class="mb-0">myGate.F :- CarryOr, 2</p>
+  <p class="mb-0">myGate.G :- CarryOr, 3</p>
+  <p class="mb-0">myGate.H :- CarryOr, 4</p>
+  <p class="mb-0">SumOr :- Sum</p>
+  <p class="mb-0">CarryOr :- Carry</p>
+</div>
